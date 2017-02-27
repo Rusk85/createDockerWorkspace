@@ -1,5 +1,8 @@
 #!/bin/bash
 # Version 0.1
+# TODO:
+# - use absolute path in order to be able to call script from anywhere
+# - ...
 # create directory tree that contains the whole toolchain for building, running, persistence and versioning of an image and its containers
 # directory tree
 # - image identifier
