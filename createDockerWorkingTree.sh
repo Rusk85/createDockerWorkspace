@@ -1,26 +1,27 @@
 #!/bin/bash
-# Version 0.1
+# Version 0.2
 # TODO:
 # - use absolute path in order to be able to call script from anywhere
 # - ...
 # create directory tree that contains the whole toolchain for building, running, persistence and versioning of an image and its containers
-# directory tree
-# - image identifier
-# |-- building
-# |--- image
-# |-- running
-# |-- volumes
+#
+# DIRECTORY TREE
+# - image identifier	# root directory
+# |-- building		# scripts related to the build but not part of the image
+# |--- image		# all files that should be included during build/execution
+# |-- running		# everything required for running containers from this image
+#
+# USAGE
+# $1 = path to directory where new folder tree is to be created
+# $2 = name of the new workspace tree
 
 
-
-IIDENT=$1
-ROOT=$(pwd)/${IIDENT}
+IIDENT=$2
+ROOT=$1${IIDENT}
 BLD_NAME=build
 IMG_NAME=image
 BUILD=${ROOT}/${BLD_NAME}/${IMG_NAME}
 RUN=${ROOT}/run
-VOL_NAME=volumes
-VOL=${ROOT}/${VOL_NAME}
 
 function nl(){
 	printf "\n"
@@ -37,7 +38,6 @@ function createGitRepo(){
 function createDirTree(){
 	mkdir -pv ${BUILD}
 	mkdir -pv ${RUN}
-	mkdir -pv ${VOL}
 }
 
 function createDockerignore(){
@@ -55,15 +55,9 @@ function createDockerfile(){
 
 function createGitignore(){
 	local gignore=${ROOT}/.gitignore
-	local sh1=".*~"
-	local sh2="*~"
-	local vol1="${VOL_NAME}/"
-	local vol2="${VOL_NAME}/*"
+	local sh1="*~"
 	
-	echo "${sh1}" > ${gignore} && \
-		echo "${sh2}" >> ${gignore} && \
-		echo "${vol1}" >> ${gignore} && \
-		echo "${vol2}" >> ${gignore}
+	echo "${sh1}" > ${gignore}
 }
 
 function createInitialCommit(){
